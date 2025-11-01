@@ -30,6 +30,22 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="绑定公共函数" prop="Captcha" v-show="数组_已选择WebApi接口.indexOf('RunJs/:JsName')>-1" >
+          <el-select
+              v-model="数组_已选择公共函数接口"
+              multiple
+              placeholder="选择RunJs/:JsName可以调用的公共函数"
+              style="width: 100%"
+              @change="on验证码多选发生变化"
+          >
+            <el-option
+                v-for="item in 数组_公共函数"
+                :key="item"
+                :label="item"
+                :value="item"
+            />
+          </el-select>
+        </el-form-item>
       </el-form>
 
     </div>
@@ -58,13 +74,16 @@ const Props = defineProps({
 const emit = defineEmits(['on对话框详细信息关闭'])
 const 数组_WebApi = ref([])
 const 数组_已选择WebApi接口 = ref(["未定义"])
+const 数组_公共函数 = ref([])
+const 数组_已选择公共函数接口 = ref([])
 const on读取WebApi数组 = async () => {
   console.log(数组_WebApi.value.length)
   数组_已选择WebApi接口.value = []
   if (数组_WebApi.value.length === 0) {
     const res = await Get全部WebAPi()
     if (res.code == 10000) {
-      数组_WebApi.value = res.data
+      数组_WebApi.value = res.data.api
+      数组_公共函数.value = res.data.publicJs
     }
   }
   console.log(数组_WebApi.value)
@@ -110,15 +129,20 @@ const on确定按钮被点击 = async (formEl: FormInstance | undefined) => {
   data.value.Key=""
   for (let i = 0; i < 数组_已选择WebApi接口.value.length; i++) {
     for(let item in 数组_WebApi.value){
-
       console.log(数组_WebApi.value[item])
       console.log(数组_已选择WebApi接口.value[i])
       if(数组_WebApi.value[item][0]===数组_已选择WebApi接口.value[i]){
-        data.value.Key+=数组_WebApi.value[item][1]+'('+数组_WebApi.value[item][0]+'),'
+        data.value.Key+='('+数组_WebApi.value[item][0]+')'
         break;
       }
     }
   }
+
+  for (let i = 0; i < 数组_已选择公共函数接口.value.length; i++) {
+        data.value.Key+='['+数组_已选择公共函数接口.value[i]+']'
+  }
+
+
   console.log(data.value.Key)
   let 返回;
   返回 = await NewWebApiToken(data.value);

@@ -211,7 +211,21 @@
         </el-table-column>
 
         <el-table-column prop="VipNumber" label="积分" width="200"/>
-        <el-table-column prop="Note" label="软件用户备注" width="200"/>
+        <el-table-column prop="Note" label="软件用户备注" show-overflow-tooltip="">
+          <template #default="scope">
+            <el-button link type="primary" size="default"
+                       @click="on软件用户备注被改变(scope.$index,scope.row.Id,scope.row.Note)" style="color:#79bbff">
+              <el-icon color="#79bbff" size="18" class="管理员备注编辑">
+                <Edit/>
+              </el-icon>
+            </el-button>
+            {{ scope.row.Note }}
+          </template>
+        </el-table-column>
+
+
+
+
         <el-table-column prop="UserClassId" label="用户类型" width="140">
           <template #default="scope">
             <el-tag
@@ -323,7 +337,7 @@ import {
   Del批量删除AppUser,
   SetStatus,
   Set批量维护增减时间点数,
-  Del批量维护_删除, Set批量维护修改用户类型, Set批量维护增减积分, Del批量维护_设置用户绑定信息
+  Del批量维护_删除, Set批量维护修改用户类型, Set批量维护增减积分, Del批量维护_设置用户绑定信息, Set批量维护修改用户备注
 } from "@/api/软件用户api.js";
 import {GetAppIdNameList} from "@/api/应用列表api.js";
 import {
@@ -716,6 +730,7 @@ const onGetAppIdNameList = async () => {
 }
 // table元素
 import {useTableHeight} from "@/composables/useTableHeight";
+import {SetPayOrderNote} from "@/api/支付充值订单api";
 
 const {tableRef, tableHeight, updateTableHeight} = useTableHeight(85)
 const on表格列宽被改变 = (newWidth: any, oldWidth: any, columns: any, event: any) => {
@@ -833,6 +848,39 @@ const on维护用户云配置输入框被关闭 = (is重新读取: boolean) => {
   }
 }
 //===============================================================
+
+const on软件用户备注被改变 = async (表项索引: number, AppUserId: number, Note: string) => {
+
+  let 新备注 = Note
+  await ElMessageBox.prompt('请输入新软件用户备注', '', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputValue: Note
+  })
+      .then(async ({value}) => {
+        新备注 = value
+
+        const res = await Set批量维护修改用户备注({
+          "AppId": 对象_搜索条件.value.AppId,
+          "Id": [AppUserId],
+          "Note": 新备注
+        })
+        console.log(res)
+        if (res.code == 10000) {
+          Data.value.List[表项索引].Note = 新备注   //成功赋新值
+
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(() => {
+        return
+      })
+
+
+}
+
 
 </script>
 
