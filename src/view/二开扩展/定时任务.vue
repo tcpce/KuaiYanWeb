@@ -84,7 +84,7 @@
         <el-table-column prop="Cron" label="Cron表达式" width="200" show-overflow-tooltip=""/>
         <el-table-column prop="type" label="类型" width="100">
           <template #default="scope">
-            <el-tag :type='["","primary", "warning", "danger"][scope.row.Type]'>
+            <el-tag :type='["","primary", "success", "info","warning","danger"][scope.row.Type]'>
               {{ ["","HTTP", "公共函数", "SQL"][scope.row.Type]??("未知"+scope.row.Type) }}
             </el-tag>
           </template>
