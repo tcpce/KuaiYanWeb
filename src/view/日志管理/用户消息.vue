@@ -2,6 +2,13 @@
   <div class="最底层div">
     <div class="内容div" style="align-items: center ">
       <el-form :inline="true">
+        <el-form-item label="选择应用" prop="" style="width:300px">
+          <el-select v-model.number="对象_搜索条件.Appid" clear placeholder="请选择应用" filterable @change="on读取列表">
+            <el-option label="全部" :value="0"/>
+            <el-option v-for="(item,index) in 数组AppId_Name" :key="item.Appid"
+                       :label="item.AppName+'('+item.Appid.toString()+')'" :value="item.Appid"/>
+          </el-select>
+        </el-form-item>
         <el-form-item prop="MsgType" label="消息类型">
           <el-select v-model="对象_搜索条件.MsgType" style="width: 100px;">
             <el-option   label="全部" :value="0"/>
@@ -324,7 +331,8 @@ const 对象_搜索条件 = ref({
   Type: 2,
   Size: 10,
   Page: 1,
-  Keywords: ""
+  Keywords: "",
+  Appid: 0,
 })
 
 const on读取列表 = () => {
@@ -357,6 +365,7 @@ const onGetLogLoginList = async () => {
 
 // table元素
 import {useTableHeight} from "@/composables/useTableHeight";
+import {GetAppIdNameList} from "@/api/应用列表api";
 const { tableRef, tableHeight, updateTableHeight } = useTableHeight(85)
 const on表格列宽被改变 = (newWidth: any, oldWidth: any, columns: any, event: any) => {
   let 局_列宽数组: number[] = 表格读取列宽数组(tableRef.value)
@@ -380,7 +389,7 @@ const on表格列宽初始化 = () => {
 
 
 onMounted(async () => {
-
+  await onGetAppIdNameList()
   Data.value = {
     "Count": 0,
     "List": []
@@ -514,6 +523,33 @@ const on设置消息类型 = async () => {
 
 }
 
+const MapAppId_Name = ref({
+  1: "管理平台",
+  2: "代理平台",
+  3: "WebApi",
+  10: "Web用户中心",
+})
+const 数组AppId_Name = ref([{
+  "Appid": 1,
+  "AppName": "1级代理平台"
+}])
+const onGetAppIdNameList = async () => {
+
+  const res = await GetAppIdNameList()
+  数组AppId_Name.value = res.data.Array
+  MapAppId_Name.value = res.data.Map
+  let a={
+    1: "管理平台",
+    2: "系统自动",
+    3: "WebApi",
+    10: "Web用户中心",
+  }
+  for ( let key in a){
+    数组AppId_Name.value.push({"Appid":Number(key),"AppName":a[key]})
+    MapAppId_Name.value[Number(key)]=a[key]
+  }
+
+}
 </script>
 
 <style scoped lang="scss">
