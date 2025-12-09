@@ -122,21 +122,6 @@
               <el-form-item label="状态提示" prop="AppStatusMessage">
                 <el-input v-model.trim="data.AppStatusMessage"/>
               </el-form-item>
-
-
-              <el-form-item label="注册送卡" prop="RegisterGiveKaClassId">
-                <el-popover placement="right" trigger="hover"
-                            :content="data.AppType<=2?'设置一个注册送卡类,注册送时间,点数,余额,积分都可以在设置,用户注册就会自动充值这个卡类简单方便':'设置一个卡类可以通过取注册送卡获取试用卡'">
-                  <template #reference>
-                    <el-select v-model="data.RegisterGiveKaClassId" clear placeholder="选择卡类">
-                      <el-option key="0" label="无赠送" :value="0"/>
-                      <el-option v-for="(值,index) in 对象_卡类型" :key="index" :label="对象_卡类型[index]"
-                                 :value="Number(index)"/>
-                    </el-select>
-                  </template>
-                </el-popover>
-              </el-form-item>
-
               <el-form-item label="绑定模式" prop="VerifyKey">
                 <el-popover placement="right" trigger="hover"
                             content="登录是否验证绑定信息,是否允许更换绑定信息">
@@ -162,18 +147,20 @@
                   </template>
                 </el-popover>
               </el-form-item>
-              <el-popover
-                  placement="top-end"
-                  :width="200"
-                  trigger="hover"
-                  content="余额和积分的区别,余额所有这个账号登录的应用都可以使用,积分只有这个账号登录的这个应用可以使用"
-              >
-                <template #reference>
-                  <el-form-item label="1Rmb兑换多少积分" prop="RmbToVipNumber">
-                    <el-input v-model.number="data.RmbToVipNumber"/>
-                  </el-form-item>
-                </template>
-              </el-popover>
+
+              <el-form-item label="注册送卡" prop="RegisterGiveKaClassId">
+                <el-popover placement="right" trigger="hover"
+                            :content="data.AppType<=2?'设置一个注册送卡类,注册送时间,点数,余额,积分都可以在设置,用户注册就会自动充值这个卡类简单方便':'设置一个卡类可以通过取注册送卡获取试用卡'">
+                  <template #reference>
+                    <el-select v-model="data.RegisterGiveKaClassId" clear placeholder="选择卡类">
+                      <el-option key="0" label="无赠送" :value="0"/>
+                      <el-option v-for="(值,index) in 对象_卡类型" :key="index" :label="对象_卡类型[index]"
+                                 :value="Number(index)"/>
+                    </el-select>
+                  </template>
+                </el-popover>
+              </el-form-item>
+
               <el-divider content-position="left">换绑/解绑</el-divider>
               <el-form-item label="免费间隔">
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -230,6 +217,31 @@
                   <el-input-number v-model="data.UpKeyData" :step="10" :value-on-clear="10" :min="0"/>
                 </el-tooltip>
               </el-form-item>
+              <el-divider content-position="left">代理相关</el-divider>
+              <el-form-item label="代理卡充值" prop="Status">
+                <el-radio-group v-model="data.AgentKaUseModel" :size="is移动端()?'small':''">
+                  <el-radio-button :value="0">无限制</el-radio-button>
+                  <el-popover placement="right" trigger="hover" content="只能充值自己的归属用户,或无归属用户">
+                    <template #reference>
+                      <el-radio-button :value="1">限归属用户</el-radio-button>
+                    </template>
+                  </el-popover>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="归属代理送卡" prop="RegisterGiveKaClassId" v-if ="data.AppType<=2">
+                <el-popover placement="right" trigger="hover"
+                            content="用户归属代理时自动充值该卡,可以激励用户主动联系代理,代理也可以用来宣传">
+                  <template #reference>
+                    <el-select v-model="data.AgentGiftKaClassId" clear placeholder="选择卡类" :style="{ width: is移动端() ? '100%' : '280px' }">
+                      <el-option key="0" label="无赠送" :value="0"/>
+                      <el-option v-for="(值,index) in 对象_卡类型" :key="index" :label="对象_卡类型[index]"
+                                 :value="Number(index)"/>
+                    </el-select>
+                  </template>
+                </el-popover>
+              </el-form-item>
+
+
             </el-tab-pane>
             <el-tab-pane label="安全设置" name="安全设置">
               <el-form-item label="用户Api地址" prop="AppWeb">
@@ -723,7 +735,8 @@ const data = ref({
   "MaxOnline": 1,
   "ExceedMaxOnlineOut": 1,
   "AppType": 1,
-  "RmbToVipNumber": 1,
+  "AgentKaUseModel": 0,
+  "AgentGiftKaClassId": 0,
   "Captcha": "",
   "ApiHook": "",
   PackTimeOut: 0,

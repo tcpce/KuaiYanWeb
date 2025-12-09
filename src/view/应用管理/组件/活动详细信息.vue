@@ -37,8 +37,27 @@
         </el-form-item>
       </el-form>
       <!--        note="cps详细信息"-->
+
       <div v-if="data.promotionType===1 && data.typeAssociatedId>0">
         <el-divider content-position="left">cps推广,关联id:{{ data.typeAssociatedId }}</el-divider>
+        <el-text type="warning">邀请关系</el-text>
+        <el-form :model="data_cpsInfo" class="demo-form-inline"   label-width="120px">
+          <el-form-item label="绑定天数">
+            <el-input-number v-model="data_cpsInfo.bindingDay"/>
+          </el-form-item>
+          <el-form-item label="被邀请用户奖励" prop="RegisterGiveKaClassId"  >
+            <el-popover placement="right" trigger="hover"
+                        content="用户填写邀请码时自动充值该卡,可以激励用户主动填写邀请码,也可以用来宣传">
+              <template #reference>
+                <el-select v-model="data_cpsInfo.bindGiveKaClassId" clear placeholder="选择卡类" :style="{ width: is移动端() ? '100%' : '280px' }">
+                  <el-option key="0" label="无赠送" :value="0"/>
+                  <el-option v-for="(值,index) in 数组_卡类" :key="index" :label="数组_卡类[index].Name"
+                             :value="Number(数组_卡类[index].Id)"/>
+                </el-select>
+              </template>
+            </el-popover>
+          </el-form-item>
+        </el-form>
         <el-text type="warning">推荐一个新用户并且成交至少一个订单,推荐成功+1,达到(包含)阈值即可升级</el-text>
         <el-form :inline="true" :model="data_cpsInfo" class="demo-form-inline">
           <el-form-item label="铜牌推广数量阈值">
@@ -70,12 +89,9 @@
             <el-input-number v-model="data_cpsInfo.grandsonKickback"/>
           </el-form-item>
         </el-form>
-        <el-text type="warning">邀请关系</el-text>
-        <el-form :model="data_cpsInfo" class="demo-form-inline">
-          <el-form-item label="绑定天数">
-            <el-input-number v-model="data_cpsInfo.bindingDay"/>
-          </el-form-item>
-        </el-form>
+
+
+
       </div>
       <!--        note="签到推广详细信息"==========================================================================-->
       <div v-if="data.promotionType===2 && data.typeAssociatedId>0">
@@ -290,12 +306,12 @@ const 读取详细信息 = async (id: number) => {
     data.value = 返回.data
     活动时间范围.value[0] = String(data.value.startTime)
     活动时间范围.value[1] = String(data.value.endTime)
+    初始化卡类信息()
     switch (data.value.promotionType) {
       case 1:
         读取详细信息_cps(data.value.typeAssociatedId)
         break;
       case 2:
-        初始化卡类信息()
         读取详细信息_签到(data.value.typeAssociatedId)
         break;
     }
@@ -323,6 +339,7 @@ type cpsInfo = {
   widePic: string,//素材_宽图,url或云存储地址
   detailPic: string,//素材_详情图,url或云存储地址
   bindingDay: number,//素材_详情图,url或云存储地址
+  bindGiveKaClassId: number,//绑定奖励卡类id
 }
 const data_cpsInfo = ref<cpsInfo>({
   id: 0,
@@ -338,6 +355,7 @@ const data_cpsInfo = ref<cpsInfo>({
   widePic: "",//素材_宽图,url或云存储地址
   detailPic: "",//素材_详情图,url或云存储地址
   bindingDay: 180,//绑定天数
+  bindGiveKaClassId: 0,//
 })
 const 读取详细信息_cps = async (id: number) => {
   if (id > 0) {
