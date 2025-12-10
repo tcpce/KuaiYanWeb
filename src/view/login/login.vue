@@ -47,7 +47,10 @@
                   position: 'relative'
                 }"
                   @click="handleImageClick"
-              ></div>
+              >                  <!-- 添加刷新图标 -->
+                <el-icon class="refresh-icon" @click="on刷新验证码">
+                  <Refresh />
+                </el-icon></div>
               <div
                       v-for="(mark, index) in clickMarks"
                       :key="index"
@@ -63,10 +66,7 @@
                   >
                     {{ mark.count }}
                   </div>
-                  <!-- 添加刷新图标 -->
-                  <el-icon class="refresh-icon" @click="on刷新验证码">
-                    <Refresh />
-                  </el-icon>
+
               </div>
           </el-form-item>
           <el-form-item>
@@ -297,7 +297,7 @@ const checkInit = async () => {
 .refresh-icon {
   position: absolute;
   right: 2px;
-  top: 85%;
+  bottom: 2px;  // 修改这里，从 top 改为 bottom
   cursor: pointer;
   font-size: 25px;
   color: #409EFF;
