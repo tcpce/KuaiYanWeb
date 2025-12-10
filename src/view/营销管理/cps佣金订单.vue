@@ -34,6 +34,7 @@
                 <el-option label="邀请上级" :value="4"/>
                 <el-option label="订单ID" :value="5"/>
                 <el-option label="金额" :value="6"/>
+                <el-option label="用户名" :value="7"/>
               </el-select>
             </template>
           </el-input>
