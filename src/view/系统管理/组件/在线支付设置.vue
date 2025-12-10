@@ -2,7 +2,20 @@
   <div class="最底层div">
     <el-form v-loading="is加载中" :inline="false" style="min-width: 80px" label-width="130px" :model="Data"
              :label-position="is移动端()?'top':'right'" ref="ruleFormRef">
-
+      <div class="内容div">
+        <el-divider content-position="left">余额支付</el-divider>
+        <el-form-item label="开关" prop="余额支付开关">
+          <el-radio-group v-model="Data.余额支付开关">
+            <el-radio-button :value="true" size="" border>开启</el-radio-button>
+            <el-radio-button :value="false" size="" border>关闭</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <div v-if="Data.余额支付开关">
+          <el-form-item label="显示名称" disabled="disabled">
+            <el-input v-model.trim="Data.余额支付显示名称"/>
+          </el-form-item>
+        </div>
+      </div>
       <div class="内容div">
         <el-divider content-position="left">支付宝PC ->
           <el-link href="https://b.alipay.com/signing/productDetailV2.htm?productId=I1011000290000001000"
@@ -419,6 +432,8 @@ const Data = ref({
   "易支付2同步回调url": "",
   "易支付2商户密钥KEY": "",
   "易支付2设备类型": "",
+  "余额支付开关": false,
+  "余额支付显示名称": "",
 })
 
 const ruleFormRef = ref<FormInstance>()
