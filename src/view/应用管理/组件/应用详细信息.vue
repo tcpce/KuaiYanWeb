@@ -613,6 +613,12 @@
                       {{dataWebUser.webUserDomain}}/user/{{data.AppId}}/
                     </el-link>
                   </el-form-item>
+                <el-form-item label="余额支付" prop="是否启用">
+                  <el-radio-group v-model="dataWebUser.balancePay">
+                    <el-radio-button :value="1" size="" border>开启</el-radio-button>
+                    <el-radio-button :value="2" size="" border>关闭</el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
                 <el-divider content-position="left">网页点选验证码配置</el-divider>
                 <el-form-item label="登陆防爆阈值"  >
                   <el-tooltip content="账号登陆失败多少次必须输入验证码"
