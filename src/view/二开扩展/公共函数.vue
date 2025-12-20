@@ -2,6 +2,13 @@
   <div class="最底层div">
     <div class="内容div" style="align-items: center ">
       <el-form :inline="true">
+        <el-form-item label="选择应用" prop="">
+          <el-select v-model.number="对象_搜索条件.AppId" clear placeholder="请选择应用" filterable>
+            <el-option :key="0" label="全部" :value="0"/>
+            <el-option v-for="(item,index) in 数组AppId_Name" :key="item.AppId"
+                       :label="item.AppName+'('+item.AppId.toString()+')'" :value="item.AppId"/>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-input class="搜索框"
                     v-model.trim="对象_搜索条件.Keywords"
@@ -145,7 +152,7 @@
 
 <script lang="ts" setup>
 import {onBeforeUnmount, onMounted, ref} from "vue";
-import {GetList, DeleteInfo} from "@/api/公共函数api.js";
+import {GetList, DeleteInfo, GetPublicAppList} from "@/api/公共函数api.js";
 import {useStore} from "vuex";
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import {ElMessage, ElMessageBox} from 'element-plus'
@@ -246,7 +253,7 @@ const Data = ref({
     }]
 })
 const Store = useStore()
-const 对象_搜索条件初始值 = {AppId: 1, Type: 1, Size: 10, Page: 1, Keywords: ""}
+const 对象_搜索条件初始值 = {AppId: 0, Type: 1, Size: 10, Page: 1, Keywords: ""}
 const 对象_搜索条件 = ref(Object.assign({}, 对象_搜索条件初始值))
 
 const on读取列表 = () => {
@@ -255,9 +262,9 @@ const on读取列表 = () => {
   onGetList()
 }
 const onReset = () => {
-  let Appidc = 对象_搜索条件.value.AppId
+
   对象_搜索条件.value = Object.assign({}, 对象_搜索条件初始值)
-  对象_搜索条件.value.AppId = Appidc
+
   console.log(对象_搜索条件.value)
 }
 
@@ -272,6 +279,7 @@ const onGetList = async () => {
   Data.value = res.data
   Store.commit("set搜索_默认选择应用AppId", 对象_搜索条件.value.AppId)
 }
+
 
 const on表格列宽被改变 = (newWidth: any, oldWidth: any, columns: any, event: any) => {
   let 局_列宽数组: number[] =表格读取列宽数组(tableRef.value)
@@ -297,6 +305,7 @@ onMounted(async () => {
   if (Store.state.搜索_公共函数.Size != 0 && Store.state.搜索_公共函数.Size != null) {
     对象_搜索条件.value = Store.state.搜索_公共函数
   }
+  await GetAppList()
   await onGetList()
   on表格列宽初始化()
 
@@ -306,6 +315,20 @@ onBeforeUnmount(() => {
   console.log("事件在卸载之前触发")
   Store.commit("set搜索_公共函数", 对象_搜索条件.value)
 })
+
+type AppInfo = {
+  AppId: number,
+  AppName: string
+}
+const 数组AppId_Name = ref<AppInfo[]>()
+
+const GetAppList = async () => {
+
+  const res = await GetPublicAppList({})
+  数组AppId_Name.value = res.data
+
+}
+
 
 </script>
 

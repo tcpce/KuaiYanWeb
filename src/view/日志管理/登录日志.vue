@@ -372,6 +372,7 @@ const MapAppId_Name = ref({
   4: "管理平台",
   5: "系统自动",
   10: "Web用户中心",
+  11: "WebSocket",
 })
 const 数组AppId_Name = ref([{
   "Appid": 1,
@@ -389,6 +390,7 @@ const onGetAppIdNameList = async () => {
     4: "管理平台",
     5: "系统自动",
     10: "Web用户中心",
+    11: "WebSocket",
   }
   for ( let key in a){
     数组AppId_Name.value.push({"Appid":Number(key),"AppName":a[key]})

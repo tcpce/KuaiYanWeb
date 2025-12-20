@@ -12,6 +12,14 @@ export const GetList = (data) => {
     data: data
   })
 }
+export const GetPublicAppList = (data) => {
+  return service({
+    url: url+'GetPublicAppList',
+    method: 'post',
+    data: data
+  })
+}
+
 
 //  Delete
 // {

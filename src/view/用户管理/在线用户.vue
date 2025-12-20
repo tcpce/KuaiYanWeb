@@ -307,6 +307,8 @@ const onGetAppIdNameList = async () => {
   数组AppId_Name.value.push({Appid:1,AppName:"管理平台"})
   数组AppId_Name.value.push({Appid:2,AppName:"代理平台"})
   数组AppId_Name.value.push({Appid:3,AppName:"WebApi"})
+  数组AppId_Name.value.push({Appid:10,AppName:"WebUser"})
+  数组AppId_Name.value.push({Appid:11,AppName:"WebSocket"})
   MapAppId_Name.value = res.data.Map
   console.log("没有搜索条件的应用,修改第一个,现在搜索条件的值为:" + res.data.Map[对象_搜索条件.value.AppId.toString()])
 

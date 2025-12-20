@@ -40,15 +40,34 @@
           <el-input v-model="data.Note" placeholder="请输入备注"/>
         </el-form-item>
         <el-form-item  label="JS函数" prop="Value" style="height: 50Vh">
-          <div style="float: right;">
-            <el-row>
-              <el-col :span="12" v-show="data.Id">
-                  <el-button @click="onJS格式化">格式化</el-button>
-              </el-col>
-              <el-col :span="12">
-                <el-button @click="onJS测试执行">测试执行</el-button>
-              </el-col>
-            </el-row>
+          <div class="button-group">
+            <div class="button-container">
+              <el-button
+                  v-if="data.Id"
+                  @click="onJS格式化"
+                  type="primary"
+                  plain
+                  class="action-button"
+              >
+                格式化
+              </el-button>
+              <el-button
+                  @click="onJS测试执行"
+                  type="primary"
+                  plain
+                  class="action-button"
+              >
+                测试执行
+              </el-button>
+              <el-button
+                  @click="on打开教程"
+                  type="info"
+                  plain
+                  class="action-button"
+              >
+                打开教程
+              </el-button>
+            </div>
           </div>
 
           <codemirror @keyup.ctrl="submit($event)" v-model="data.Value" placeholder="请输入js代码"
@@ -167,7 +186,7 @@ onMounted(() => {
 })
 const on编辑框函数名失去焦点 = (event) => {
   if (data.value.Value.length < 10) {
-    data.value.Value = "function " + data.value.Name + "(JSON形参文本) {\n" +
+    data.value.Value = "function " + data.value.Name + "(JSON形参) {\n" +
         '    //return $用户在线信息; // {"Key":"aaaaaa","Status":1,"Tab":"AMD Ryzen 7 6800H with Radeon Graphics         |178BFBFF00A40F41","Uid":21,"User":"aaaaaa"}\n' +
         '    //return $应用信息 // {"AppId":10001,"AppName":"演示对接账密限时Rsa交换密匙","Status":3,"VipData":"{\\n\\"VipData\\":\\"这里的数据,只有登录成功并且账号会员不过期才会传输出去的数据\\",\\n\\"VipData2\\":\\"这里的数据,只有登录成功并且账号会员不过期才会传输出去的数据\\"\\n}\n' +
         '    //return $用户在线信息.Uid\n' +
@@ -251,6 +270,11 @@ const onGetAppIdNameList = async () => {
     "Appid": 3,
     "AppName": "ApiHook函数"
   })
+  数组AppId_Name.value.unshift({
+    "Appid": 11,
+    "AppName": "WebSocket"
+  })
+
   MapAppId_Name.value = res.data.Map
 }
 
@@ -285,6 +309,10 @@ async function onJS测试执行() {
   }
 
 }
+function on打开教程() {
+  // 在新标签页中打开教程网页
+  window.open('https://www.fnkuaiyan.cn/PublicJs/%E5%85%AC%E5%85%B1%E5%87%BD%E6%95%B0Api.html', '_blank');
+}
 
 </script>
 
@@ -300,5 +328,6 @@ async function onJS测试执行() {
   word-wrap: break-word;
   word-break: normal;
 }
+
 
 </style>
