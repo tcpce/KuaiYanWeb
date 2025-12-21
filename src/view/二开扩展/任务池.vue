@@ -95,7 +95,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="TaskCount" label="30天任务总计" width="130"/>
-        <el-table-column prop="MqttSendMsg" label="mqtt通知主题" width="130"/>
+
         <el-table-column prop="HookSubmitDataStart" label="Hook函数创建入库前" width="230"/>
         <el-table-column prop="HookSubmitDataEnd" label="Hook函数创建入库后" width="230"/>
         <el-table-column prop="HookReturnDataStart" label="Hook函数执行入库前" width="230"/>
@@ -286,7 +286,6 @@ type TaskPool = {
   "HookSubmitDataEnd": string,
   "HookReturnDataStart": string,
   "HookReturnDataEnd": string,
-  "MqttSendMsg": string,
   "Sort": number,
 }
 
@@ -304,7 +303,6 @@ const List = ref({
       "HookSubmitDataEnd": "",
       "HookReturnDataStart": "",
       "HookReturnDataEnd": "",
-      "MqttSendMsg": "",
       "Sort": "",
     }]
 })
